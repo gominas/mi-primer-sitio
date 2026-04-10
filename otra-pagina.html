@@ -10,60 +10,66 @@
             background-color: #0d1117; 
             color: #c9d1d9; 
             text-align: center; 
-            margin: 0; padding: 20px;
+            margin: 0; padding: 10px;
         }
         .card { 
             background: #161b22; 
-            padding: 25px; 
+            padding: 20px; 
             border-radius: 15px; 
             border: 2px solid #a371f7; 
             box-shadow: 0 0 20px #a371f7;
-            max-width: 500px; 
-            margin: auto;
+            max-width: 450px; 
+            margin: 20px auto;
         }
 
-        /* Contenedor de cámara y previa */
+        /* Contenedor del Visor */
         .visor-container {
-            position: relative;
             width: 100%;
             border-radius: 10px;
             border: 3px solid #58a6ff;
             box-shadow: 0 0 15px #58a6ff;
             background: #000;
             overflow: hidden;
-            line-height: 0;
+            margin-bottom: 20px;
         }
         video, img#previa {
             width: 100%;
             height: auto;
             display: block;
         }
-        #previa { display: none; } /* Oculto hasta que se toma la foto */
+        #previa { display: none; } /* Escondido al inicio */
 
-        /* Botones Neón */
-        .controles { margin-top: 20px; display: flex; justify-content: center; gap: 20px; }
+        /* Controles de Botones */
+        .controles { 
+            display: flex; 
+            justify-content: center; 
+            gap: 20px; 
+            min-height: 60px;
+        }
         
         .btn {
-            border: none; padding: 15px 30px; border-radius: 10px;
-            font-size: 24px; cursor: pointer; transition: 0.3s;
+            border: none; 
+            padding: 15px 25px; 
+            border-radius: 10px;
+            font-size: 20px; 
+            cursor: pointer; 
+            font-weight: bold;
+            transition: 0.3s;
         }
 
-        .btn-capturar { background: #db61a2; color: white; box-shadow: 0 0 10px #f778ba; }
+        /* Botón Rosa Capturar */
+        #btn-foto { background: #db61a2; color: white; box-shadow: 0 0 10px #f778ba; }
         
-        .btn-tik { 
-            background: #238636; color: white; display: none; 
-            border: 2px solid #3fb950; box-shadow: 0 0 15px #3fb950;
-        }
-        
-        .btn-cruz { 
-            background: #da3633; color: white; display: none; 
-            border: 2px solid #f85149; box-shadow: 0 0 15px #f85149;
-        }
+        /* Botones de Confirmación (Ocultos con CSS) */
+        .btn-confirmar { display: none; } 
+
+        #btn-tik { background: #238636; color: white; border: 2px solid #3fb950; box-shadow: 0 0 15px #3fb950; }
+        #btn-cruz { background: #da3633; color: white; border: 2px solid #f85149; box-shadow: 0 0 15px #f85149; }
 
         .btn:hover { transform: scale(1.1); }
 
         .flecha-volver {
-            display: inline-block; margin-top: 30px; font-size: 2em;
+            display: inline-block; margin-top: 20px; font-size: 2em;
             color: #58a6ff; text-decoration: none; text-shadow: 0 0 10px #58a6ff;
         }
     </style>
@@ -71,18 +77,18 @@
 <body>
 
     <div class="card">
-        <h1 id="titulo">📸 aprieta el musculo!</h1>
+        <h1 id="titulo">📸 Mi Progreso</h1>
         
         <div class="visor-container">
             <video id="video" autoplay playsinline></video>
-            <img id="previa" src="" alt="Previa de tu foto">
+            <img id="previa" src="">
         </div>
 
         <div class="controles">
-            <button id="btn-foto" class="btn btn-capturar">TOMAR FOTO</button>
+            <button id="btn-foto" class="btn">TOMAR FOTO</button>
             
-            <button id="btn-cruz" class="btn btn-cruz">❌</button>
-            <button id="btn-tik" class="btn btn-tik">✅</button>
+            <button id="btn-cruz" class="btn btn-confirmar">❌</button>
+            <button id="btn-tik" class="btn btn-confirmar">✅</button>
         </div>
 
         <canvas id="canvas" style="display:none;" width="640" height="480"></canvas>
@@ -97,44 +103,49 @@
         const btnTik = document.getElementById('btn-tik');
         const btnCruz = document.getElementById('btn-cruz');
         const canvas = document.getElementById('canvas');
-        let fotoGuardada = null;
+        const titulo = document.getElementById('titulo');
 
-        // Iniciar cámara
-        navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-            video.srcObject = stream;
-        });
+        // Arrancar cámara
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(stream => { video.srcObject = stream; })
+            .catch(err => alert("Error de cámara: " + err));
 
-        // Al dar clic en TOMAR FOTO
+        // ACCIÓN: TOMAR FOTO
         btnFoto.addEventListener('click', () => {
+            // 1. Dibujar la foto en el canvas invisible
             const context = canvas.getContext('2d');
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            fotoGuardada = canvas.toDataURL('image/png');
             
-            // Mostrar imagen, ocultar video
-            previa.src = fotoGuardada;
+            // 2. Pasar la imagen al elemento <img> y mostrarlo
+            previa.src = canvas.toDataURL('image/png');
             previa.style.display = 'block';
+            
+            // 3. Ocultar el video
             video.style.display = 'none';
             
-            // Cambiar botones
+            // 4. CAMBIAR BOTONES (Esta es la parte clave)
             btnFoto.style.display = 'none';
             btnTik.style.display = 'block';
             btnCruz.style.display = 'block';
-            document.getElementById('titulo').innerText = "¿Te gusta esta foto?";
+            
+            titulo.innerText = "¿Guardar foto?";
         });
 
-        // Al dar clic en la CRUZ (Repetir)
+        // ACCIÓN: REPETIR (CRUZ)
         btnCruz.addEventListener('click', () => {
             previa.style.display = 'none';
             video.style.display = 'block';
+            
             btnFoto.style.display = 'block';
             btnTik.style.display = 'none';
             btnCruz.style.display = 'none';
-            document.getElementById('titulo').innerText = "📸 Captura tu Progreso";
+            
+            titulo.innerText = "📸 Mi Progreso";
         });
 
-        // Al dar clic en el TIK (Guardar e ir a la siguiente página)
+        // ACCIÓN: ACEPTAR (TIK)
         btnTik.addEventListener('click', () => {
-            // Aquí en el futuro usaremos base de datos, por ahora solo navegamos
+            // Aquí te llevará a la siguiente página
             window.location.href = "galeria-final.html"; 
         });
     </script>
