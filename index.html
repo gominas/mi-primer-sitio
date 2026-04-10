@@ -156,7 +156,7 @@
         
         <button class="btn" id="boton-sumar">¡Sumar punto de hoy!</button>
 
-        <div id="mensaje-fuego">¡Tu punto se ha sumado! 🔥</div>
+        <div id="mensaje-fuego" style="display: none; color: #ff4500; font-weight: bold; margin-top: 10px;">¡Tu punto se ha sumado! 🔥</div>
 
         <a href="otra-pagina.html" class="flecha-siguiente">→</a>
     </div>
@@ -167,7 +167,7 @@ const boton = document.getElementById('boton-sumar');
     const inputMinutos = document.getElementById('minutos-input');
 
     boton.addEventListener('click', function() {
-        const minutos = inputMinutos.value;
+        const minutos = Number(inputMinutos.value);
         
         if (minutos > 0) {
             localStorage.setItem('minutos_sesion_actual', minutos);
