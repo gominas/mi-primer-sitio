@@ -5,60 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gym Tracker - Gominas</title>
     <style>
-        /* --- Diseño General (CSS) --- */
-        body { font-family: sans-serif; background-color: #f4f4f9; color: #333; text-align: center; padding: 20px; }
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 400px; margin: auto; position: relative; overflow: hidden; }
-        h1 { color: #2c3e50; margin-bottom: 5px; }
-        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+        /* --- Diseño General (CSS) Estilo Neón --- */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #0d1117; /* Fondo súper oscuro (azul casi negro) */
+            color: #c9d1d9; /* Texto gris muy claro */
+            text-align: center; 
+            padding: 20px; 
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Centrado vertical */
+        }
         
-        input { padding: 10px; width: 80%; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+        .card { 
+            background: #161b22; /* Fondo de la tarjeta oscuro */
+            padding: 30px; 
+            border-radius: 15px; 
+            /* Borde y sombra Neón Azul Principal */
+            border: 2px solid #58a6ff; 
+            box-shadow: 0 0 10px #58a6ff, 0 0 20px #58a6ff, inset 0 0 10px #58a6ff;
+            max-width: 400px; 
+            width: 100%;
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        h1 { 
+            color: #fff; /* Título blanco */
+            margin-bottom: 10px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* Espacio para la pesa */
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #58a6ff, 0 0 30px #58a6ff; /* Brillo Neón en Título */
+        }
+
+        /* --- Estilo de la Pesa --- */
+        .pesa {
+            font-size: 1.2em; /* Pesa un poco más grande */
+            filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 10px #58a6ff); /* Brillo propio para la pesa */
+        }
+
+        hr { 
+            border: 0; 
+            border-top: 2px solid #30363d; /* Separador oscuro */
+            margin: 25px 0; 
+        }
         
-        /* El Botón Principal */
+        input { 
+            padding: 12px; 
+            width: calc(80% - 24px); 
+            margin: 15px 0; 
+            background-color: #0d1117; 
+            border: 1px solid #30363d; 
+            border-radius: 5px; 
+            font-size: 16px; 
+            color: #c9d1d9;
+            transition: border 0.3s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #a371f7; /* Cambia a neón lila al enfocar */
+            box-shadow: 0 0 5px #a371f7;
+        }
+        
+        /* El Botón Principal - Neón Verde */
         .btn { 
-            background-color: #27ae60; 
+            background-color: #238636; 
             color: white; 
-            border: none; 
+            border: 2px solid #3fb950; 
             padding: 12px 24px; 
             border-radius: 5px; 
             cursor: pointer; 
             font-size: 16px; 
             font-weight: bold;
-            transition: background 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 5px #3fb950;
         }
-        .btn:hover { background-color: #2ecc71; }
+        .btn:hover { 
+            background-color: #2ea043; 
+            box-shadow: 0 0 15px #3fb950, 0 0 25px #3fb950;
+        }
 
-        /* --- El Efecto de Fuego (CSS) --- */
+        /* --- El Efecto de Fuego Rediseñado para Neón (CSS) --- */
         #mensaje-fuego {
             display: none; /* Oculto por defecto */
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
-            margin-top: 20px;
+            margin-top: 25px;
             
-            /* Colores de fuego y degradado */
-            background: linear-gradient(0deg, #ff4500 0%, #ff8c00 50%, #ffd700 100%);
-            -webkit-background-clip: text; /* Corta el fondo con la forma del texto */
+            /* Colores de fuego neón lila/rosa */
+            background: linear-gradient(0deg, #a371f7 0%, #db61a2 50%, #f778ba 100%);
+            -webkit-background-clip: text; 
             background-clip: text;
-            color: transparent; /* Hace el texto transparente para ver el fondo */
+            color: transparent; 
             
-            /* Sombra para dar profundidad y brillo */
-            text-shadow: 0 0 5px #ffa500, 0 0 15px #ff4500, 0 0 25px #ff0000;
+            /* Sombra Neón Lila/Rosa */
+            text-shadow: 0 0 5px #a371f7, 0 0 15px #db61a2, 0 0 25px #f778ba;
             
-            /* Animación de parpadeo de llama */
-            animation: flamear 0.6s ease-in-out infinite alternate;
+            /* Animación de parpadeo */
+            animation: flamearNeon 0.6s ease-in-out infinite alternate;
         }
 
-        /* Definición de la animación de fuego */
-        @keyframes flamear {
-            0% { transform: scale(1) translateY(0); opacity: 0.9; text-shadow: 0 0 5px #ffa500, 0 0 15px #ff4500; }
-            100% { transform: scale(1.05) translateY(-2px); opacity: 1; text-shadow: 0 0 7px #ffd700, 0 0 20px #ff8c00, 0 0 30px #ff4500; }
+        /* Definición de la animación de fuego neón */
+        @keyframes flamearNeon {
+            0% { transform: scale(1) translateY(0); opacity: 0.9; text-shadow: 0 0 5px #a371f7, 0 0 15px #db61a2; }
+            100% { transform: scale(1.05) translateY(-2px); opacity: 1; text-shadow: 0 0 7px #f778ba, 0 0 20px #db61a2, 0 0 30px #a371f7; }
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h1>¡Bienvenido!</h1>
-        <p>Tu Gym Tracker personal.</p>
+        <h1>
+            <span class="pesa">🏋️‍♂️</span> /* Pesa Motivadora */
+            ¡Bienvenido!
+            <span class="pesa">🏋️‍♂️</span>
+        </h1>
+        <p>Tu Gym Tracker personal con estilo neón.</p>
         
         <hr>
         
@@ -69,27 +137,4 @@
         <input type="number" id="minutos-input" placeholder="Minutos entrenados (ej. 60)">
         <br>
         
-        <button class="btn" id="boton-sumar">¡Sumar punto de hoy!</button>
-
-        <div id="mensaje-fuego">¡Tu punto se ha sumado! 🔥</div>
-    </div>
-
-    <script>
-        // 1. Buscamos los elementos en la página
-        const boton = document.getElementById('boton-sumar');
-        const mensaje = document.getElementById('mensaje-fuego');
-
-        // 2. Decimos qué hacer cuando se haga CLIC
-        boton.addEventListener('click', function() {
-            // Mostramos el mensaje (estilo de CSS activado)
-            mensaje.style.display = 'block';
-
-            // Opcional: Ocultar el mensaje después de 3 segundos
-            setTimeout(function() {
-                mensaje.style.display = 'none';
-            }, 3000); // 3000 milisegundos = 3 segundos
-        });
-    </script>
-
-</body>
-</html>
+        <button class="btn" id="boton-sumar">¡Sumar punto de hoy
