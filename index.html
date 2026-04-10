@@ -162,16 +162,27 @@
     </div>
 
     <script>
-        const boton = document.getElementById('boton-sumar');
-        const mensaje = document.getElementById('mensaje-fuego');
+<script>
+    const boton = document.getElementById('boton-sumar');
+    const mensaje = document.getElementById('mensaje-fuego');
+    const inputMinutos = document.getElementById('minutos-input');
 
-        boton.addEventListener('click', function() {
+    boton.addEventListener('click', function() {
+        const minutos = inputMinutos.value;
+        
+        if(minutos > 0) {
+            // Guardamos los minutos en una "nota adhesiva" temporal
+            localStorage.setItem('minutos_sesion_actual', minutos);
+            
             mensaje.style.display = 'block';
-
             setTimeout(function() {
                 mensaje.style.display = 'none';
-            }, 3000); 
-        });
+            }, 3000);
+        } else {
+            alert("Por favor, introduce cuántos minutos has entrenado 💪");
+        }
+    });
+</script>
     </script>
 
 </body>
