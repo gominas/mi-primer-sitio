@@ -162,19 +162,19 @@
     </div>
 
     <script>
-<script>
-    const boton = document.getElementById('boton-sumar');
+const boton = document.getElementById('boton-sumar');
     const mensaje = document.getElementById('mensaje-fuego');
     const inputMinutos = document.getElementById('minutos-input');
 
     boton.addEventListener('click', function() {
         const minutos = inputMinutos.value;
         
-        if(minutos > 0) {
-            // Guardamos los minutos en una "nota adhesiva" temporal
+        if (minutos > 0) {
             localStorage.setItem('minutos_sesion_actual', minutos);
             
+            // Esto hace que aparezca el fuego
             mensaje.style.display = 'block';
+            
             setTimeout(function() {
                 mensaje.style.display = 'none';
             }, 3000);
@@ -182,7 +182,6 @@
             alert("Por favor, introduce cuántos minutos has entrenado 💪");
         }
     });
-</script>
     </script>
 
 </body>
