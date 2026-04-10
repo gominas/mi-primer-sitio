@@ -144,10 +144,40 @@
         });
 
         // ACCIÓN: ACEPTAR (TIK)
-        btnTik.addEventListener('click', () => {
-            // Aquí te llevará a la siguiente página
-            window.location.href = "galeria-final.html"; 
-        });
+       // ESTO ES LO QUE TIENES QUE PEGAR:
+btnTik.addEventListener('click', () => {
+    // A. Detectar qué mes es hoy (ej: "ABR")
+    const meses = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+    const mesActual = meses[new Date().getMonth()];
+
+    // B. GUARDAR LA FOTO
+    // Abrimos el "cajón" de fotos del mes, si no hay nada, creamos una lista vacía []
+    let fotosYaGuardadas = JSON.parse(localStorage.getItem('fotos_' + mesActual) || "[]");
+    // Metemos la foto que acabas de hacer (fotoGuardada) en la lista
+    fotosYaGuardadas.push(fotoGuardada);
+    // Guardamos la lista actualizada en el móvil
+    localStorage.setItem('fotos_' + mesActual, JSON.stringify(fotosYaGuardadas));
+
+    // C. SUMAR 1 PUNTO AL MES
+    let puntosActuales = parseInt(localStorage.getItem('puntos_' + mesActual) || "0");
+    localStorage.setItem('puntos_' + mesActual, puntosActuales + 1);
+
+    // D. SUMAR LOS MINUTOS DE LA PÁGINA ANTERIOR
+    // Recuperamos los minutos que guardamos en la "nota adhesiva" de index.html
+    let minutosDeHoy = parseInt(localStorage.getItem('minutos_sesion_actual') || "0");
+    // Buscamos cuánto tiempo total llevamos este mes
+    let minutosTotalesMes = parseInt(localStorage.getItem('tiempo_' + mesActual) || "0");
+    
+    // Sumamos lo de hoy al total y lo guardamos
+    localStorage.setItem('tiempo_' + mesActual, minutosTotalesMes + minutosDeHoy);
+    
+    // E. LIMPIEZA
+    // Borramos la nota temporal de los minutos para que mañana no se vuelvan a sumar solos
+    localStorage.removeItem('minutos_sesion_actual');
+
+    // F. IR A LA GALERÍA FINAL
+    window.location.href = "galeria-final.html"; 
+});
     </script>
 </body>
 </html>
