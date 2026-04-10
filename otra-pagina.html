@@ -3,215 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gym Tracker - Fotos Neón</title>
+    <title>Gym Tracker - Confirmar Foto</title>
     <style>
-        /* --- Diseño General (CSS) Estilo Neón --- */
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #0d1117; /* Fondo súper oscuro */
-            color: #c9d1d9; /* Texto gris muy claro */
+            font-family: 'Segoe UI', sans-serif; 
+            background-color: #0d1117; 
+            color: #c9d1d9; 
             text-align: center; 
-            padding: 20px; 
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh; /* Centrado vertical */
+            margin: 0; padding: 20px;
         }
-        
         .card { 
-            background: #161b22; /* Fondo de la tarjeta oscuro */
-            padding: 30px; 
+            background: #161b22; 
+            padding: 25px; 
             border-radius: 15px; 
-            /* Borde y sombra Neón Lila Principal */
             border: 2px solid #a371f7; 
-            box-shadow: 0 0 10px #a371f7, 0 0 20px #a371f7, inset 0 0 10px #a371f7;
+            box-shadow: 0 0 20px #a371f7;
             max-width: 500px; 
-            width: 100%;
-            position: relative; 
-            overflow: visible; 
+            margin: auto;
         }
 
-        h1 { 
-            color: #fff; /* Título blanco */
-            margin-bottom: 20px; 
-            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #a371f7, 0 0 30px #a371f7; /* Brillo Neón en Título */
-        }
-
-        /* --- Estilo de la Cámara Neón --- */
-        #video-container {
+        /* Contenedor de cámara y previa */
+        .visor-container {
             position: relative;
-            padding-bottom: 75%; /* Ratio 4:3 para el video */
-            height: 0;
-            overflow: hidden;
+            width: 100%;
             border-radius: 10px;
-            /* Borde neón azul para la cámara */
             border: 3px solid #58a6ff;
             box-shadow: 0 0 15px #58a6ff;
             background: #000;
+            overflow: hidden;
+            line-height: 0;
         }
-
-        #video {
-            position: absolute;
-            top: 0;
-            left: 0;
+        video, img#previa {
             width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ajusta el video para llenar el contenedor */
+            height: auto;
+            display: block;
+        }
+        #previa { display: none; } /* Oculto hasta que se toma la foto */
+
+        /* Botones Neón */
+        .controles { margin-top: 20px; display: flex; justify-content: center; gap: 20px; }
+        
+        .btn {
+            border: none; padding: 15px 30px; border-radius: 10px;
+            font-size: 24px; cursor: pointer; transition: 0.3s;
         }
 
-        #canvas { display: none; } /* Oculto, solo sirve para procesar la foto */
-
-        /* El Botón de Foto - Neón Rosa/Fucsia */
-        .btn-foto {
-            background-color: #db61a2; 
-            color: white; 
-            border: 2px solid #f778ba; 
-            padding: 12px 24px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 20px;
-            transition: background 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 0 5px #f778ba;
+        .btn-capturar { background: #db61a2; color: white; box-shadow: 0 0 10px #f778ba; }
+        
+        .btn-tik { 
+            background: #238636; color: white; display: none; 
+            border: 2px solid #3fb950; box-shadow: 0 0 15px #3fb950;
         }
-        .btn-foto:hover { 
-            background-color: #f778ba; 
-            box-shadow: 0 0 15px #f778ba, 0 0 25px #f778ba;
+        
+        .btn-cruz { 
+            background: #da3633; color: white; display: none; 
+            border: 2px solid #f85149; box-shadow: 0 0 15px #f85149;
         }
 
-        hr { 
-            border: 0; 
-            border-top: 2px solid #30363d; /* Separador oscuro */
-            margin: 30px 0; 
-        }
+        .btn:hover { transform: scale(1.1); }
 
-        h3 {
-            color: #fff;
-            text-shadow: 0 0 5px #fff, 0 0 10px #58a6ff;
-            margin-bottom: 15px;
-        }
-
-        /* --- Galería de Fotos Neón --- */
-        .galeria {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .foto-contenedor {
-            background: #0d1117;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #30363d;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .foto-contenedor:hover {
-            border-color: #3fb950; /* Cambia a verde neón al pasar el ratón */
-            box-shadow: 0 0 10px #3fb950;
-        }
-
-        .foto-contenedor img {
-            width: 100%;
-            border-radius: 5px;
-            filter: drop-shadow(0 0 2px rgba(255,255,255,0.3)); /* Brillo sutil para la foto */
-        }
-
-        .fecha-foto {
-            font-size: 0.85em;
-            color: #58a6ff; /* Neón Azul */
-            margin-top: 8px;
-            font-weight: bold;
-            text-shadow: 0 0 3px #58a6ff;
-        }
-
-        /* Flecha de Volver Neón Azul */
         .flecha-volver {
-            display: inline-block;
-            margin-top: 30px;
-            font-size: 2.2em;
-            color: #58a6ff;
-            text-decoration: none;
-            cursor: pointer;
-            transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease;
-            text-shadow: 0 0 5px #58a6ff, 0 0 10px #58a6ff;
+            display: inline-block; margin-top: 30px; font-size: 2em;
+            color: #58a6ff; text-decoration: none; text-shadow: 0 0 10px #58a6ff;
         }
-
-        .flecha-volver:hover {
-            color: #a371f7; /* Cambia a lila */
-            transform: scale(1.1) translateX(-3px);
-            text-shadow: 0 0 7px #a371f7, 0 0 15px #a371f7, 0 0 25px #a371f7;
-        }
-
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h1>📸 Progreso Neón</h1>
+        <h1 id="titulo">📸 aprieta el musculo!</h1>
         
-        <div id="video-container">
+        <div class="visor-container">
             <video id="video" autoplay playsinline></video>
+            <img id="previa" src="" alt="Previa de tu foto">
         </div>
-        
-        <button class="btn-foto" id="snap">TOMAR FOTO</button>
-        
-        <canvas id="canvas" width="640" height="480"></canvas>
 
-        <hr>
+        <div class="controles">
+            <button id="btn-foto" class="btn btn-capturar">TOMAR FOTO</button>
+            
+            <button id="btn-cruz" class="btn btn-cruz">❌</button>
+            <button id="btn-tik" class="btn btn-tik">✅</button>
+        </div>
 
-        <h3>Galería del Mes</h3>
-        <div class="galeria" id="galeria">
-            </div>
+        <canvas id="canvas" style="display:none;" width="640" height="480"></canvas>
 
         <a href="index.html" class="flecha-volver">←</a>
     </div>
 
     <script>
         const video = document.getElementById('video');
+        const previa = document.getElementById('previa');
+        const btnFoto = document.getElementById('btn-foto');
+        const btnTik = document.getElementById('btn-tik');
+        const btnCruz = document.getElementById('btn-cruz');
         const canvas = document.getElementById('canvas');
-        const snap = document.getElementById('snap');
-        const galeria = document.getElementById('galeria');
+        let fotoGuardada = null;
 
-        // 1. Pedir permiso para usar la cámara
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-            .then((stream) => {
-                video.srcObject = stream;
-            })
-            .catch((err) => {
-                console.error("Error al acceder a la cámara: " + err);
-                alert("Por favor, permite el acceso a la cámara y usa una conexión HTTPS segura.");
-            });
+        // Iniciar cámara
+        navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+            video.srcObject = stream;
+        });
 
-        // 2. Función para tomar la foto
-        snap.addEventListener('click', () => {
+        // Al dar clic en TOMAR FOTO
+        btnFoto.addEventListener('click', () => {
             const context = canvas.getContext('2d');
-            context.drawImage(video, 0, 0, 640, 480);
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            fotoGuardada = canvas.toDataURL('image/png');
             
-            // Convertir la foto a una imagen real
-            const dataUrl = canvas.toDataURL('image/png');
+            // Mostrar imagen, ocultar video
+            previa.src = fotoGuardada;
+            previa.style.display = 'block';
+            video.style.display = 'none';
             
-            // Crear la fecha de hoy
-            const hoy = new Date();
-            // Formato de fecha más "digital": DD/MM/AAAA - HH:MM
-            const fechaTexto = hoy.toLocaleDateString() + " - " + hoy.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            // Cambiar botones
+            btnFoto.style.display = 'none';
+            btnTik.style.display = 'block';
+            btnCruz.style.display = 'block';
+            document.getElementById('titulo').innerText = "¿Te gusta esta foto?";
+        });
 
-            // Crear el elemento en la galería
-            const div = document.createElement('div');
-            div.className = 'foto-contenedor';
-            div.innerHTML = `
-                <img src="${dataUrl}">
-                <div class="fecha-foto">${fechaTexto}</div>
-            `;
-            
-            galeria.prepend(div); // Poner la foto más nueva arriba
+        // Al dar clic en la CRUZ (Repetir)
+        btnCruz.addEventListener('click', () => {
+            previa.style.display = 'none';
+            video.style.display = 'block';
+            btnFoto.style.display = 'block';
+            btnTik.style.display = 'none';
+            btnCruz.style.display = 'none';
+            document.getElementById('titulo').innerText = "📸 Captura tu Progreso";
+        });
+
+        // Al dar clic en el TIK (Guardar e ir a la siguiente página)
+        btnTik.addEventListener('click', () => {
+            // Aquí en el futuro usaremos base de datos, por ahora solo navegamos
+            window.location.href = "galeria-final.html"; 
         });
     </script>
-
 </body>
 </html>
