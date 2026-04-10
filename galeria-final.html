@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Tracker - Archivo</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background-color: #0d1117; color: #c9d1d9; 
+            text-align: center; margin: 0; padding: 20px;
+        }
+        .card { 
+            background: #161b22; padding: 20px; border-radius: 15px; 
+            border: 2px solid #58a6ff; box-shadow: 0 0 15px #58a6ff;
+            max-width: 500px; margin: auto;
+        }
+        h1 { color: #fff; text-shadow: 0 0 10px #58a6ff; }
+
+        /* Cuadrícula de Meses (2 en 2) */
+        .meses-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .mes-btn {
+            background: #161b22;
+            border: 2px solid #a371f7;
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 5px #a371f7;
+        }
+
+        .mes-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #a371f7;
+            background: #a371f7;
+        }
+
+        /* Sección de detalles (oculta al inicio) */
+        #detalles-mes {
+            display: none;
+            margin-top: 30px;
+            padding: 15px;
+            border-top: 2px dashed #58a6ff;
+        }
+
+        .stats-resumen {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: #0d1117;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #3fb950;
+            box-shadow: 0 0 5px #3fb950;
+        }
+
+        .galeria-fotos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .galeria-fotos img {
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #fff;
+        }
+
+        .flecha-volver {
+            display: inline-block; margin-top: 30px; font-size: 2em;
+            color: #a371f7; text-decoration: none; text-shadow: 0 0 10px #a371f7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>🗓️ Historial Gym</h1>
+        <p>Selecciona un mes para ver tu progreso:</p>
+
+        <div class="meses-grid">
+            <button class="mes-btn" onclick="verMes('ENE')">ENE</button>
+            <button class="mes-btn" onclick="verMes('FEB')">FEB</button>
+            <button class="mes-btn" onclick="verMes('MAR')">MAR</button>
+            <button class="mes-btn" onclick="verMes('ABR')">ABR</button>
+            <button class="mes-btn" onclick="verMes('MAY')">MAY</button>
+            <button class="mes-btn" onclick="verMes('JUN')">JUN</button>
+            </div>
+
+        <div id="detalles-mes">
+            <h2 id="nombre-mes-titulo" style="color: #3fb950;">MES</h2>
+            
+            <div class="stats-resumen">
+                <div class="stat-item">
+                    <small>PUNTOS</small>
+                    <div id="puntos-mes" style="font-size: 1.5em; font-weight: bold;">0</div>
+                </div>
+                <div class="stat-item">
+                    <small>MINUTOS</small>
+                    <div id="tiempo-mes" style="font-size: 1.5em; font-weight: bold;">0</div>
+                </div>
+            </div>
+
+            <div class="galeria-fotos" id="fotos-mes">
+                </div>
+        </div>
+
+        <a href="index.html" class="flecha-volver">←</a>
+    </div>
+
+    <script>
+        function verMes(nombreMes) {
+            // Mostrar la sección de detalles
+            document.getElementById('detalles-mes').style.display = 'block';
+            document.getElementById('nombre-mes-titulo').innerText = "Resumen de " + nombreMes;
+
+            // 1. Obtener datos de LocalStorage (lo que se guardó en el móvil)
+            const puntosGuardados = localStorage.getItem('puntos_' + nombreMes) || 0;
+            const tiempoGuardado = localStorage.getItem('tiempo_' + nombreMes) || 0;
+            const fotosGuardadas = JSON.parse(localStorage.getItem('fotos_' + nombreMes) || "[]");
+
+            // 2. Pintar los datos en la pantalla
+            document.getElementById('puntos-mes').innerText = puntosGuardados;
+            document.getElementById('tiempo-mes').innerText = tiempoGuardado;
+
+            // 3. Cargar las fotos
+            const contenedorFotos = document.getElementById('fotos-mes');
+            contenedorFotos.innerHTML = ""; // Limpiar antes de cargar
+            
+            fotosGuardadas.forEach(fotoUrl => {
+                const img = document.createElement('img');
+                img.src = fotoUrl;
+                contenedorFotos.appendChild(img);
+            });
+
+            if(fotosGuardadas.length === 0) {
+                contenedorFotos.innerHTML = "<p>No hay fotos este mes.</p>";
+            }
+        }
+    </script>
+</body>
+</html>
