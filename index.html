@@ -28,8 +28,8 @@
             box-shadow: 0 0 10px #58a6ff, 0 0 20px #58a6ff, inset 0 0 10px #58a6ff;
             max-width: 400px; 
             width: 100%;
-            position: relative; 
-            overflow: hidden; 
+            position: relative; /* Importante para posicionar la flecha */
+            overflow: visible; /* Permitir que la flecha sobresalga ligeramente si se desea */
         }
 
         h1 { 
@@ -42,10 +42,11 @@
             text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #58a6ff, 0 0 30px #58a6ff; /* Brillo Neón en Título */
         }
 
-        /* --- Estilo de la Pesa --- */
+        /* --- Estilo de la Pesa (Solo Emoji) --- */
         .pesa {
-            font-size: 1.2em; /* Pesa un poco más grande */
+            font-size: 1.2em; 
             filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 10px #58a6ff); /* Brillo propio para la pesa */
+            /* He eliminado el estilo de texto anterior aquí */
         }
 
         hr { 
@@ -91,38 +92,54 @@
             box-shadow: 0 0 15px #3fb950, 0 0 25px #3fb950;
         }
 
-        /* --- El Efecto de Fuego Rediseñado para Neón (CSS) --- */
+        /* --- El Efecto de Fuego Neón (CSS) --- */
         #mensaje-fuego {
             display: none; /* Oculto por defecto */
             font-size: 26px;
             font-weight: bold;
             margin-top: 25px;
             
-            /* Colores de fuego neón lila/rosa */
             background: linear-gradient(0deg, #a371f7 0%, #db61a2 50%, #f778ba 100%);
             -webkit-background-clip: text; 
             background-clip: text;
             color: transparent; 
             
-            /* Sombra Neón Lila/Rosa */
             text-shadow: 0 0 5px #a371f7, 0 0 15px #db61a2, 0 0 25px #f778ba;
             
-            /* Animación de parpadeo */
             animation: flamearNeon 0.6s ease-in-out infinite alternate;
         }
 
-        /* Definición de la animación de fuego neón */
         @keyframes flamearNeon {
             0% { transform: scale(1) translateY(0); opacity: 0.9; text-shadow: 0 0 5px #a371f7, 0 0 15px #db61a2; }
             100% { transform: scale(1.05) translateY(-2px); opacity: 1; text-shadow: 0 0 7px #f778ba, 0 0 20px #db61a2, 0 0 30px #a371f7; }
         }
+
+        /* --- Estilo de la Flecha Neón --- */
+        .flecha-siguiente {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            font-size: 2em;
+            color: #58a6ff; /* Color Neón Azul Principal */
+            text-decoration: none; /* Eliminar subrayado */
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease;
+            text-shadow: 0 0 5px #58a6ff, 0 0 10px #58a6ff; /* Brillo inicial */
+        }
+
+        .flecha-siguiente:hover {
+            color: #a371f7; /* Cambia a lila al pasar el ratón */
+            transform: scale(1.1) translateX(3px); /* Se agranda y mueve un poco */
+            text-shadow: 0 0 7px #a371f7, 0 0 15px #a371f7, 0 0 25px #a371f7; /* Brillo más intenso */
+        }
+
     </style>
 </head>
 <body>
 
     <div class="card">
         <h1>
-            <span class="pesa">🏋️‍♂️</span> /* Pesa Motivadora */
+            <span class="pesa">🏋️‍♂️</span> /* Solo Emoji */
             ¡Bienvenido!
             <span class="pesa">🏋️‍♂️</span>
         </h1>
@@ -137,4 +154,25 @@
         <input type="number" id="minutos-input" placeholder="Minutos entrenados (ej. 60)">
         <br>
         
-        <button class="btn" id="boton-sumar">¡Sumar punto de hoy
+        <button class="btn" id="boton-sumar">¡Sumar punto de hoy!</button>
+
+        <div id="mensaje-fuego">¡Tu punto se ha sumado! 🔥</div>
+
+        <a href="otra-pagina.html" class="flecha-siguiente">→</a>
+    </div>
+
+    <script>
+        const boton = document.getElementById('boton-sumar');
+        const mensaje = document.getElementById('mensaje-fuego');
+
+        boton.addEventListener('click', function() {
+            mensaje.style.display = 'block';
+
+            setTimeout(function() {
+                mensaje.style.display = 'none';
+            }, 3000); 
+        });
+    </script>
+
+</body>
+</html>
